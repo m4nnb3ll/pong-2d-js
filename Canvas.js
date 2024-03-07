@@ -52,8 +52,7 @@ export class Canvas
 
 	setup()
 	{
-		console.log("I Ran!");
-
+		this.dprAdjust();
 		this.ctx.shadowBlur = this.el.height / 75; // Blur radius of the shadow
 		this.ctx.shadowOffsetY = this.el.height / 75;
 		this.ball = {
