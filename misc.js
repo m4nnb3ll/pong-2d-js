@@ -14,3 +14,18 @@ export function drawRect(canvas, x, y, w, h, color)
     canvas.ctx.fillStyle = color;
     canvas.ctx.fillRect(x, y, w, h);
 }
+
+export function setShadow(canvas)
+{
+	canvas.ctx.shadowColor = '#0005'; // Shadow color with alpha (transparency)
+	canvas.ctx.shadowBlur = canvas.el.height / 75; // Blur radius of the shadow
+	canvas.ctx.shadowOffsetY = canvas.el.height / 75;
+}
+
+export function clearShadow(canvas)
+{
+	canvas.ctx.shadowBlur = 0;
+	canvas.ctx.shadowColor = 'transparent';
+	canvas.ctx.shadowOffsetY = 0;
+}
+

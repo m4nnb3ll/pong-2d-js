@@ -1,6 +1,6 @@
 "use strict"
 
-import { mkGradient, drawRect } from './misc.js';
+import { mkGradient, drawRect, setShadow, clearShadow } from './misc.js';
 
 export class Canvas
 {
@@ -19,7 +19,6 @@ export class Canvas
 		this.el.focus();
 		this.el.addEventListener("keydown", (e) => { e.preventDefault(); e.stopPropagation(); this.state.keyDown = e.key });
 		this.el.addEventListener("keyup", (e) => { e.preventDefault(); e.stopPropagation(); this.state.keyDown = '' });
-		this.ctx.shadowColor = '#0005'; // Shadow color with alpha (transparency)
 	}
 
 	setSizeAttrib()
@@ -53,8 +52,6 @@ export class Canvas
 	setup()
 	{
 		this.dprAdjust();
-		this.ctx.shadowBlur = this.el.height / 75; // Blur radius of the shadow
-		this.ctx.shadowOffsetY = this.el.height / 75;
 		this.ball = {
 			x : this.el.width / 2,
 			y : this.el.height / 2,
@@ -66,7 +63,7 @@ export class Canvas
 		}
 		// this Object, side, gradient colors
 		this.user.setup( this, 'l', ['#feec63', '#ff0100'] );
-		this.com.setup( this, 'r', ['#013afe', '#68ebff'] );
+		this.com.setup( this, 'r', ['#68ebff', '#013afe'] );
 		this.resetBall();
 	}
 
@@ -77,35 +74,37 @@ export class Canvas
 		this.ball.y = this.el.height /2;
 		this.ball.speed = 0.007 * this.el.width;
 		this.ball.velocityX = this.ball.speed;
+		this.ball.velocityY = this.ball.speed;
 	}
 
 	// draw the ball
 	drawBall()
 	{
 		// console.log("ball from drawBall: ", this.ball);
+		setShadow(this);
 		this.ctx.fillStyle = this.ball.color;
 		this.ctx.beginPath();
 		this.ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI*2, true);
 		this.ctx.closePath();
 		this.ctx.fill();
+		clearShadow(this);
 	}
 
 	// draw the net
 	drawNet()
 	{
-
+		setShadow(this);
 		this.ctx.setLineDash([this.el.height / 7, this.el.height / 20]);//pattern
-
 		// Set line color and width
 		this.ctx.strokeStyle = '#fff7';
 		this.ctx.lineWidth = this.el.width / 120;
-
 		// Draw the dashed line
 		this.ctx.beginPath();
 		this.ctx.moveTo(this.el.width / 2, this.el.height / 20); // Starting point
 		this.ctx.lineTo(this.el.width / 2, this.el.height); // Ending point
 		this.ctx.stroke();
 		this.ctx.setLineDash([]);
+		clearShadow(this);
 	}
 
 	// collision detection
